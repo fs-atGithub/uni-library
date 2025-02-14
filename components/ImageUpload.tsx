@@ -81,7 +81,6 @@ const ImageUpload = ({
         onClick={(e) => {
           e.preventDefault();
           if (ikUploadRef.current) {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             //@ts-expect-error
             ikUploadRef.current.click();
           }

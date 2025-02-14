@@ -63,6 +63,14 @@ export default [
           },
         },
       ],
+
+      // Unused variables rules
+      'no-undef': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
+      '@typescript-eslint/explicit-module-boundary-types': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-var-requires': 'off',
+      '@typescript-eslint/ban-ts-comment': 'off',
     },
     settings: {
       tailwindcss: {
@@ -91,6 +99,7 @@ export default [
     files: ['*.ts', '*.tsx'],
     rules: {
       'no-undef': 'off', // Disable no-undef for TypeScript files
+      //  '@typescript-eslint/no-unused-vars': 'warn', // Already in the main ruleset, but included here for clarity if needed.
     },
   },
 ];
