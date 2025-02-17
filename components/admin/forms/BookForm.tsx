@@ -6,6 +6,8 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+import ColorPicker from '@/components/admin/ColorPicker';
+import FileUpload from '@/components/FileUpload';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -42,7 +44,9 @@ const BookForm = ({ type, ...book }: Props) => {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof bookSchema>) => {};
+  const onSubmit = async (values: z.infer<typeof bookSchema>) => {
+    console.log('values', values);
+  };
 
   return (
     <Form {...form}>
@@ -157,7 +161,15 @@ const BookForm = ({ type, ...book }: Props) => {
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
               <FormLabel className="text-base font-normal text-dark-500">
-                Book image
+                <FileUpload
+                  type={'image'}
+                  accept={'image/*'}
+                  placeholder={'Upload the book cover'}
+                  folder={'/books/covers'}
+                  variant={'light'}
+                  onFileChange={field.onChange}
+                  value={field.value}
+                />
               </FormLabel>
               <FormControl>{/*TODO: File upload*/}</FormControl>
               <FormMessage />
@@ -172,7 +184,10 @@ const BookForm = ({ type, ...book }: Props) => {
               <FormLabel className="text-base font-normal text-dark-500">
                 Primary color
               </FormLabel>
-              <FormControl>{/*TODO: Color picker*/}</FormControl>
+              <ColorPicker
+                onPickerChange={field.onChange}
+                value={field.value}
+              />
               <FormMessage />
             </FormItem>
           )}
@@ -205,7 +220,17 @@ const BookForm = ({ type, ...book }: Props) => {
               <FormLabel className="text-base font-normal text-dark-500">
                 Book trailer
               </FormLabel>
-              <FormControl>{/*TODO: File upload*/}</FormControl>
+              <FormControl>
+                <FileUpload
+                  type={'video'}
+                  accept={'video/*'}
+                  placeholder={'Upload the book trailer'}
+                  folder={'/books/videos'}
+                  variant={'light'}
+                  onFileChange={field.onChange}
+                  value={field.value}
+                />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}

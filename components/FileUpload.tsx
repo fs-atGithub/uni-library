@@ -43,6 +43,7 @@ interface Props {
   folder: string;
   variant: 'dark' | 'light';
   onFileChange: (filePath: string) => void;
+  value?: string;
 }
 
 const FileUpload = ({
@@ -52,9 +53,12 @@ const FileUpload = ({
   folder,
   variant,
   onFileChange,
+  value,
 }: Props) => {
   const ikUploadRef = useRef(null);
-  const [file, setFile] = useState<{ filePath: string } | null>(null);
+  const [file, setFile] = useState<{ filePath: string } | null>({
+    filePath: value ?? '',
+  });
   const [progress, setProgress] = useState(0);
 
   const styles = {
@@ -106,6 +110,7 @@ const FileUpload = ({
     }
     return true;
   };
+
   return (
     <ImageKitProvider
       publicKey={publicKey}
@@ -149,8 +154,6 @@ const FileUpload = ({
         {file && (
           <p className={cn('upload-filename', styles.text)}>{file.filePath}</p>
         )}
-
-        {/*{file && <p className={'upload-filename'}>{file.filePath}</p>}*/}
       </button>
       {progress > 0 && progress !== 100 && (
         <div className={'w-full rounded-full bg-green-200'}>
