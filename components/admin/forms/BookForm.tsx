@@ -19,6 +19,8 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { toast } from '@/hooks/use-toast';
+import { createBook } from '@/lib/admin/actions/book';
 import { bookSchema } from '@/lib/validations';
 
 interface Props extends Partial<Book> {
@@ -45,7 +47,21 @@ const BookForm = ({ type, ...book }: Props) => {
   });
 
   const onSubmit = async (values: z.infer<typeof bookSchema>) => {
-    console.log('values', values);
+    const result = await createBook(values);
+
+    if (result.success) {
+      toast({
+        title: 'Success',
+        description: 'Book created successfully',
+      });
+      router.push(`/admin/books/${result.data.id}`);
+    } else {
+      toast({
+        title: 'Error',
+        description: result.message,
+        variant: 'destructive',
+      });
+    }
   };
 
   return (
