@@ -25,7 +25,7 @@ const Layout = async ({ children }: { children: ReactNode }) => {
     .limit(1)
     .then((res) => res[0]?.isAdmin === 'ADMIN');
 
-  if (isAdmin) {
+  if (!isAdmin) {
     redirect('/');
   }
 
