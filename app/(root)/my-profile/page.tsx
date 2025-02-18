@@ -3,22 +3,24 @@ import React from 'react';
 
 import BookList from '@/components/BookList';
 import { db } from '@/database/drizzle';
-import { borrowRecords } from '@/database/schema';
+import { books } from '@/database/schema';
 
 const Profile = async () => {
-  const borrowedBooks = await db
+  const latestBooks = (await db
     .select()
-    .from(borrowRecords)
-    .orderBy(desc(borrowRecords.createdAt));
+    .from(books)
+    .limit(10)
+    .orderBy(desc(books.createdAt))) as Book[];
 
   return (
     <>
       <BookList
         title="Borrowed Books"
-        books={borrowedBooks}
+        books={latestBooks}
         containerClassName="mt-28"
       />
     </>
   );
 };
+
 export default Profile;
