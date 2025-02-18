@@ -1,18 +1,16 @@
-import { desc, eq } from 'drizzle-orm';
-import { Session } from 'next-auth';
+import { desc } from 'drizzle-orm';
 import React from 'react';
 
 import BookList from '@/components/BookList';
 import { db } from '@/database/drizzle';
 import { borrowRecords } from '@/database/schema';
 
-const Profile = async ({ session }: { session: Session }) => {
+const Profile = async () => {
   const borrowedBooks = await db
     .select()
     .from(borrowRecords)
-    .where(eq(borrowRecords.userId, session?.user?.id))
-    .orderBy(desc(borrowRecords.createdAt))
-    .execute();
+    .orderBy(desc(borrowRecords.createdAt));
+
   return (
     <>
       <BookList
