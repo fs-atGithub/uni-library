@@ -4,13 +4,13 @@ import React from 'react';
 
 import BookList from '@/components/BookList';
 import { db } from '@/database/drizzle';
-import { borrowRecords, users } from '@/database/schema';
+import { borrowRecords } from '@/database/schema';
 
 const Profile = async ({ session }: { session: Session }) => {
   const borrowedBooks = await db
     .select()
     .from(borrowRecords)
-    .where(eq(users.id, session?.user?.id))
+    .where(eq(borrowRecords.userId, session?.user?.id))
     .orderBy(desc(borrowRecords.createdAt))
     .execute();
   return (
