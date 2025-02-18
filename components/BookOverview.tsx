@@ -15,6 +15,7 @@ const BookOverview = ({
   coverColor,
   coverUrl,
   summary,
+  userId,
 }: Book) => {
   return (
     <section className={'book-overview'}>
