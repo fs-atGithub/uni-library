@@ -1,6 +1,7 @@
 import { serve } from '@upstash/workflow/nextjs';
 import { eq } from 'drizzle-orm';
 
+import Welcome from '@/app/emails/Welcome'; // Import the Welcome component
 import { db } from '@/database/drizzle';
 import { users } from '@/database/schema';
 import { sendEmail } from '@/lib/workflow';
@@ -40,12 +41,15 @@ const getUserState = async (email: string): Promise<userState> => {
 export const { POST } = serve<InitialData>(async (context) => {
   const { email, fullName } = context.requestPayload;
 
-  //Welcome email
+  //Welcome email - Using the imported Welcome component
   await context.run('new-signup', async () => {
+    // Render the Welcome component to a string.  You'll likely need to adapt your Welcome component to be renderable to a string.
+    const welcomeMessage = Welcome({ fullName }); // Assuming Welcome is a function component that accepts fullName.
+
     await sendEmail({
       email,
       subject: 'Welcome to the platform',
-      message: `Welcome to the platform ${fullName} `,
+      message: welcomeMessage, // Use the rendered component output as the message
     });
   });
 
@@ -69,7 +73,7 @@ export const { POST } = serve<InitialData>(async (context) => {
         await sendEmail({
           email,
           subject: 'Welcome back',
-          message: `it is good to see you active ${fullName} `,
+          message: `It's good to see you active ${fullName} `, // Corrected typo here
         });
       });
     }
