@@ -1,8 +1,11 @@
 import { serve } from '@upstash/workflow/nextjs';
 import { eq } from 'drizzle-orm';
+import { Resend } from 'resend';
 
+import Welcome from '@/components/Welcome';
 import { db } from '@/database/drizzle';
 import { users } from '@/database/schema';
+import config from '@/lib/config';
 import { sendEmail } from '@/lib/workflow';
 
 type userState = 'non-active' | 'active';
@@ -37,15 +40,18 @@ const getUserState = async (email: string): Promise<userState> => {
   return 'active';
 };
 
+const resend = new Resend(config.env.resendToken);
+
 export const { POST } = serve<InitialData>(async (context) => {
   const { email, fullName } = context.requestPayload;
 
   //Welcome email
   await context.run('new-signup', async () => {
-    await sendEmail({
+    //@ts-expect-error
+    await resend.sendEmail({
       email,
       subject: 'Welcome to the platform',
-      message: `Welcome to the platform ${fullName} `,
+      react: Welcome(),
     });
   });
 
