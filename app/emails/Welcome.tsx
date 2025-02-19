@@ -17,6 +17,8 @@ import {
 import type * as React from 'react';
 
 interface WelcomeProps {
+  fullName?: string;
+  type?: 'welcome' | 'reminder' | 'reengagement';
   steps?: {
     id: number;
     Description: React.ReactNode;
@@ -29,6 +31,7 @@ const baseUrl = process.env.NEXT_PUBLIC_API_ENDPOINT
   : '';
 
 const PropDefaults: WelcomeProps = {
+  type: 'welcome',
   steps: [
     {
       id: 1,
@@ -75,9 +78,45 @@ const PropDefaults: WelcomeProps = {
 };
 
 export const Welcome = ({
+  fullName = '',
+  type = 'welcome',
   steps = PropDefaults.steps,
   links = PropDefaults.links,
 }: WelcomeProps) => {
+  const getMessage = () => {
+    switch (type) {
+      case 'welcome':
+        return {
+          title: `Welcome to Netlify, ${fullName}!`,
+          subtitle:
+            "You're joining millions of developers building and shipping fast, scalable applications.",
+          buttonText: 'Go to your dashboard',
+        };
+      case 'reminder':
+        return {
+          title: `Hey ${fullName}, we miss you!`,
+          subtitle:
+            "It has been a while since we last saw you. Come back and check out what's new!",
+          buttonText: 'Check your account',
+        };
+      case 'reengagement':
+        return {
+          title: `Welcome back, ${fullName}!`,
+          subtitle:
+            'We’re thrilled to see you active again. Let’s build something great together!',
+          buttonText: 'Continue where you left off',
+        };
+      default:
+        return {
+          title: 'Welcome!',
+          subtitle: 'Glad to have you here.',
+          buttonText: 'Explore now',
+        };
+    }
+  };
+
+  const { title, subtitle, buttonText } = getMessage();
+
   return (
     <Html>
       <Head />
@@ -98,7 +137,7 @@ export const Welcome = ({
           },
         }}
       >
-        <Preview>Netlify Welcome</Preview>
+        <Preview>{title}</Preview>
         <Body className="bg-offwhite font-sans text-base">
           <Img
             src={`${baseUrl}/static/netlify-logo.png`}
@@ -108,27 +147,24 @@ export const Welcome = ({
             className="mx-auto my-20"
           />
           <Container className="p-45 bg-white">
-            <Heading className="my-0 text-center leading-8">
-              Welcome to Netlify
-            </Heading>
+            <Heading className="my-0 text-center leading-8">{title}</Heading>
 
             <Section>
               <Row>
-                <Text className="text-base">
-                  Congratulations! You're joining over 3 million developers
-                  around the world who use Netlify to build and ship sites,
-                  stores, and apps.
-                </Text>
-
-                <Text className="text-base">Here's how to get started:</Text>
+                <Text className="text-center text-base">{subtitle}</Text>
               </Row>
             </Section>
 
-            <ul>{steps?.map(({ Description }) => Description)}</ul>
+            {type === 'welcome' && (
+              <>
+                <Text className="text-base">Here's how to get started:</Text>
+                <ul>{steps?.map(({ Description }) => Description)}</ul>
+              </>
+            )}
 
             <Section className="text-center">
               <Button className="bg-brand rounded-lg px-[18px] py-3 text-white">
-                Go to your dashboard
+                {buttonText}
               </Button>
             </Section>
 

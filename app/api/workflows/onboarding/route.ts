@@ -1,10 +1,12 @@
+
 import { serve } from '@upstash/workflow/nextjs';
 import { eq } from 'drizzle-orm';
-
-import Welcome from '@/app/emails/Welcome'; // Import the Welcome component
 import { db } from '@/database/drizzle';
 import { users } from '@/database/schema';
 import { sendEmail } from '@/lib/workflow';
+
+import { render } from '@react-email/render';
+import Welcome from '@/app/emails/Welcome';
 
 type userState = 'non-active' | 'active';
 
@@ -41,16 +43,13 @@ const getUserState = async (email: string): Promise<userState> => {
 export const { POST } = serve<InitialData>(async (context) => {
   const { email, fullName } = context.requestPayload;
 
-  //Welcome email - Using the imported Welcome component
+  //Welcome email
   await context.run('new-signup', async () => {
-    // Render the Welcome component to a string.  You'll likely need to adapt your Welcome component to be renderable to a string.
-    const welcomeMessage = Welcome({ fullName }); // Assuming Welcome is a function component that accepts fullName.
-
     await sendEmail({
       email,
       subject: 'Welcome to the platform',
-      message: welcomeMessage, // Use the rendered component output as the message
-    });
+      message: render(<Welcome fullName={fullName} type="welcome" />),
+  });
   });
 
   await context.sleep('wait-for-3-days', 60 * 60 * 24 * 3);
@@ -73,7 +72,7 @@ export const { POST } = serve<InitialData>(async (context) => {
         await sendEmail({
           email,
           subject: 'Welcome back',
-          message: `It's good to see you active ${fullName} `, // Corrected typo here
+          message: `it is good to see you active ${fullName} `,
         });
       });
     }
