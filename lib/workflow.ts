@@ -1,7 +1,6 @@
 import { Client as QStashClient, resend } from '@upstash/qstash';
 import { Client as WorkflowClient } from '@upstash/workflow';
 
-import Welcome from '@/components/Welcome';
 import config from '@/lib/config';
 
 export const workflowClient = new WorkflowClient({
@@ -31,7 +30,16 @@ export const sendEmail = async ({
       from: 'Filip <info@zaprojekte.com>',
       to: [email],
       subject,
-      html: Welcome(message),
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; background-color: #f4f4f4; border-radius: 10px;">
+          <h2 style="color: #333;">${subject}</h2>
+          <p style="color: #555;">${message}</p>
+          <a href="https://yourwebsite.com" 
+             style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 5px;">
+            Visit our website
+          </a>
+        </div>
+      `,
     },
   });
 };
