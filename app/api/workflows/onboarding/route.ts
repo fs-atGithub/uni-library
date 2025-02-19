@@ -1,8 +1,6 @@
-import { render } from '@react-email/render';
 import { serve } from '@upstash/workflow/nextjs';
 import { eq } from 'drizzle-orm';
 
-import Welcome from '@/app/emails/Welcome';
 import { db } from '@/database/drizzle';
 import { users } from '@/database/schema';
 import { sendEmail } from '@/lib/workflow';
@@ -47,7 +45,7 @@ export const { POST } = serve<InitialData>(async (context) => {
     await sendEmail({
       email,
       subject: 'Welcome to the platform',
-      message: render(Welcome({ fullName })),
+      message: `Welcome to the platform ${fullName} `,
     });
   });
 
