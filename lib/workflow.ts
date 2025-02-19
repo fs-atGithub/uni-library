@@ -13,21 +13,28 @@ export const workflowClient = new WorkflowClient({
 const qstashClient = new QStashClient({
   token: config.env.upstash.qstashToken,
 });
+
 const resend = new Resend(config.env.resendToken);
 
 export const sendEmail = async ({
   email,
   subject,
-  fullName,
+  message,
 }: {
   email: string;
   subject: string;
-  fullName: string;
+  message: string;
 }) => {
-  await resend.emails.send({
-    from: 'Filip <info@zaprojekte.com>',
-    to: email,
-    subject,
-    react: WelcomeEmail({ fullName }), // Send a styled React email
+  await qstashClient.publishJSON({
+    api: {
+      name: 'email',
+      provider: resend({ token: config.env.resendToken }),
+    },
+    body: {
+      from: 'Filip <info@zaprojekte.com>',
+      to: [email],
+      subject,
+      react: WelcomeEmail({ subject, message }), // Using React Email component
+    },
   });
 };
