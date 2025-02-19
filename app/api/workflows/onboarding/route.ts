@@ -1,12 +1,11 @@
-
+import { render } from '@react-email/render';
 import { serve } from '@upstash/workflow/nextjs';
 import { eq } from 'drizzle-orm';
+
+import Welcome from '@/app/emails/Welcome';
 import { db } from '@/database/drizzle';
 import { users } from '@/database/schema';
 import { sendEmail } from '@/lib/workflow';
-
-import { render } from '@react-email/render';
-import Welcome from '@/app/emails/Welcome';
 
 type userState = 'non-active' | 'active';
 
@@ -48,8 +47,8 @@ export const { POST } = serve<InitialData>(async (context) => {
     await sendEmail({
       email,
       subject: 'Welcome to the platform',
-      message: render(<Welcome fullName={fullName} type="welcome" />),
-  });
+      message: render(Welcome({ fullName })),
+    });
   });
 
   await context.sleep('wait-for-3-days', 60 * 60 * 24 * 3);
