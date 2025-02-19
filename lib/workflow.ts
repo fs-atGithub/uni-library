@@ -1,6 +1,8 @@
-import { Client as QStashClient, resend } from '@upstash/qstash';
+import { Client as QStashClient } from '@upstash/qstash';
 import { Client as WorkflowClient } from '@upstash/workflow';
+import { Resend } from 'resend';
 
+import WelcomeEmail from '@/components/emails/WelcomeEmail';
 import config from '@/lib/config';
 
 export const workflowClient = new WorkflowClient({
@@ -11,35 +13,21 @@ export const workflowClient = new WorkflowClient({
 const qstashClient = new QStashClient({
   token: config.env.upstash.qstashToken,
 });
+const resend = new Resend(config.env.resendToken);
 
 export const sendEmail = async ({
   email,
   subject,
-  message,
+  fullName,
 }: {
   email: string;
   subject: string;
-  message: string;
+  fullName: string;
 }) => {
-  await qstashClient.publishJSON({
-    api: {
-      name: 'email',
-      provider: resend({ token: config.env.resendToken }),
-    },
-    body: {
-      from: 'Filip <info@zaprojekte.com>',
-      to: [email],
-      subject,
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; background-color: #f4f4f4; border-radius: 10px;">
-          <h2 style="color: #333;">${subject}</h2>
-          <p style="color: #555;">${message}</p>
-          <a href="https://yourwebsite.com" 
-             style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 5px;">
-            Visit our website
-          </a>
-        </div>
-      `,
-    },
+  await resend.emails.send({
+    from: 'Filip <info@zaprojekte.com>',
+    to: email,
+    subject,
+    react: WelcomeEmail({ fullName }), // Send a styled React email
   });
 };
