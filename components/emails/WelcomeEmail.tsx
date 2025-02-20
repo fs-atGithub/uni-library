@@ -9,7 +9,12 @@ import {
 } from '@react-email/components';
 import React from 'react';
 
-export default function WelcomeEmail({ fullName }: { fullName: string }) {
+export default function WelcomeEmail({
+  fullName,
+}: {
+  fullName: string;
+  message: string;
+}) {
   return (
     <Html>
       <Head />
