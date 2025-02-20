@@ -11,6 +11,7 @@ import React from 'react';
 
 export default function WelcomeEmail({
   fullName,
+  message,
 }: {
   fullName: string;
   message: string;
@@ -29,8 +30,9 @@ export default function WelcomeEmail({
           }}
         >
           <Heading style={{ color: '#333' }}>
-            Welcome to the platform, ${fullName}!
+            Welcome to the platform, {fullName}!
           </Heading>
+          <Text style={{ color: '#555' }}>{message}</Text>
           <Text style={{ color: '#555' }}>
             We’re excited to have you. Click below to explore:
           </Text>
