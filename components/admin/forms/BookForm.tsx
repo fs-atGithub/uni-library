@@ -187,7 +187,7 @@ const BookForm = ({ type, ...book }: Props) => {
                   value={field.value}
                 />
               </FormLabel>
-              <FormControl>{/*TODO: File upload*/}</FormControl>
+              <FormControl>{/* TODO: File upload */}</FormControl>
               <FormMessage />
             </FormItem>
           )}

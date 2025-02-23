@@ -137,7 +137,7 @@ const FileUpload = ({
         onClick={(e) => {
           e.preventDefault();
           if (ikUploadRef.current) {
-            //@ts-expect-error
+            //  @ts-expect-error
             ikUploadRef.current.click();
           }
         }}

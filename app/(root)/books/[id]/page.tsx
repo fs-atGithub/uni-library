@@ -1,12 +1,12 @@
-import { eq } from "drizzle-orm";
-import { redirect } from "next/navigation";
-import React from "react";
+import { eq } from 'drizzle-orm';
+import { redirect } from 'next/navigation';
+import React from 'react';
 
-import { auth } from "@/auth";
-import BookOverview from "@/components/BookOverview";
-import BookVideo from "@/components/BookVideo";
-import { db } from "@/database/drizzle";
-import { books } from "@/database/schema";
+import { auth } from '@/auth';
+import BookOverview from '@/components/BookOverview';
+import BookVideo from '@/components/BookVideo';
+import { db } from '@/database/drizzle';
+import { books } from '@/database/schema';
 
 const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const id = (await params).id;
@@ -19,7 +19,7 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
     .where(eq(books.id, id))
     .limit(1);
 
-  if (!bookDetails) redirect("/404");
+  if (!bookDetails) redirect('/404');
 
   return (
     <>
@@ -36,14 +36,12 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
             <h3>Summary</h3>
 
             <div className="space-y-5 text-xl text-light-100">
-              {bookDetails.summary.split("\n").map((line, i) => (
+              {bookDetails.summary.split('\n').map((line, i) => (
                 <p key={i}>{line}</p>
               ))}
             </div>
           </section>
         </div>
-
-        {/*  SIMILAR*/}
       </div>
     </>
   );

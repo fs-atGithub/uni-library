@@ -5,7 +5,7 @@ import { auth } from '@/auth';
 import BookList from '@/components/BookList';
 import BookOverview from '@/components/BookOverview';
 import { db } from '@/database/drizzle';
-import { books, users } from '@/database/schema';
+import { books } from '@/database/schema';
 
 const Home = async () => {
   const session = await auth();

@@ -40,7 +40,7 @@ const getUserState = async (email: string): Promise<userState> => {
 export const { POST } = serve<InitialData>(async (context) => {
   const { email, fullName } = context.requestPayload;
 
-  //Welcome email
+  //  Welcome email
   await context.run('new-signup', async () => {
     await sendEmail({
       email,

@@ -9,7 +9,12 @@ import {
 } from '@react-email/components';
 import React from 'react';
 
-export default function WelcomeEmail({ fullName }: { fullName: string }) {
+type Props = {
+  message: string;
+  fullName: string;
+};
+
+export default function WelcomeEmail({ fullName, message }: Props) {
   return (
     <Html>
       <Head />
@@ -26,9 +31,7 @@ export default function WelcomeEmail({ fullName }: { fullName: string }) {
           <Heading style={{ color: '#333' }}>
             Welcome to the platform, ${fullName}!
           </Heading>
-          <Text style={{ color: '#555' }}>
-            We’re excited to have you. Click below to explore:
-          </Text>
+          <Text style={{ color: '#555' }}>{message}</Text>
           <Button
             href="https://zaprojekte.com"
             style={{

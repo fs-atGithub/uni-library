@@ -1,40 +1,24 @@
-import pluginJs from '@eslint/js';
-import pluginNext from '@next/eslint-plugin-next';
-import pluginImport from 'eslint-plugin-import';
-import pluginReact from 'eslint-plugin-react';
-import pluginTailwindcss from 'eslint-plugin-tailwindcss';
-import globals from 'globals';
-import tseslint from 'typescript-eslint';
+import { FlatCompat } from '@eslint/eslintrc';
+import js from '@eslint/js';
 
-/** @type {import('eslint').Linter.FlatConfig[]} */
-export default [
-  // Apply to specific file extensions
-  { files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'] },
+const compat = new FlatCompat({
+  // import.meta.dirname is available after Node.js v20.11.0
+  baseDirectory: import.meta.dirname,
+  recommendedConfig: js.configs.recommended,
+});
 
-  // Set global variables for browser environments
-  { languageOptions: { globals: globals.browser } },
+const eslintConfig = [
+  ...compat.config({
+    extends: [
+      'eslint:recommended',
+      'next',
+      'next/core-web-vitals',
+      'next/typescript',
+      'plugin:tailwindcss/recommended',
+      'plugin:import/typescript',
+      'prettier',
+    ],
 
-  // Recommended configurations from various plugins
-  pluginJs.configs.recommended,
-  ...tseslint.configs.recommended,
-  pluginReact.configs.flat.recommended,
-
-  // Specify React version in settings
-  {
-    settings: {
-      react: {
-        version: 'detect', // Automatically detect the React version
-      },
-    },
-  },
-
-  // Next.js-specific and custom rules configuration
-  {
-    plugins: {
-      import: pluginImport,
-      tailwindcss: pluginTailwindcss,
-      next: pluginNext,
-    },
     rules: {
       // Import order rules
       'import/order': [
@@ -51,7 +35,7 @@ export default [
           'newlines-between': 'always',
           pathGroups: [
             {
-              pattern: '@app/**',
+              pattern: '@app/**/*', // Adjusted to include files within directories
               group: 'external',
               position: 'after',
             },
@@ -71,35 +55,16 @@ export default [
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-var-requires': 'off',
       '@typescript-eslint/ban-ts-comment': 'off',
-    },
-    settings: {
-      tailwindcss: {
-        // Tailwind-specific settings (if needed)
-      },
-    },
-  },
+      'tailwindcss/migration-from-tailwind-2': ['off'],
 
-  // Adding Next.js specific rules directly
-  {
-    files: ['**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx'],
-    rules: {
-      // Add Next.js specific rules here if needed
-      'next/no-html-link-for-pages': 'warn', // Example rule for Next.js
-      // You might want to add more Next.js specific rules based on your needs
-    },
-  },
+      // Disable Tailwind CSS migration rule for Tailwind v2 to v3 migration.
+      // 'tailwindcss/migration-from-tailwind-2': ['error', { onlyReportUsedFeatures: true },],
 
-  // Ignore specific patterns
-  {
-    ignores: ['components/ui/**'],
-  },
-
-  // TypeScript-specific overrides
-  {
-    files: ['*.ts', '*.tsx'],
-    rules: {
-      'no-undef': 'off', // Disable no-undef for TypeScript files
-      //  '@typescript-eslint/no-unused-vars': 'warn', // Already in the main ruleset, but included here for clarity if needed.
+      // Or completely disable it:
+      //"tailwindcss/migration-from-tailwind-2": ["warn", { onlyReportUsedFeatures : false }],
+      //"tailwindcss/migration-from-tailwind-2": ["error", { onlyReportUsedFeatures : false }],
     },
-  },
+  }),
 ];
+
+export default eslintConfig;
