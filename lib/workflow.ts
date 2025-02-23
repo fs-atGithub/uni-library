@@ -18,30 +18,19 @@ export const sendEmail = async ({
   email,
   subject,
   fullName,
-  message,
 }: {
   email: string;
   subject: string;
   fullName: string;
   message: string;
 }) => {
-  try {
-    console.log('Preparing to send email...');
+  // Ensure WelcomeEmail is a valid React component
 
-    // Ensure WelcomeEmail is a valid React component
-    const emailContent = WelcomeEmail({ fullName, message });
-
-    const response = await resend.emails.send({
-      from: 'Filip <info@zaprojekte.com>',
-      to: [email],
-      subject,
-      react: emailContent,
-    });
-
-    console.log('Email sent successfully:', response);
-    return response;
-  } catch (error) {
-    console.error('Error sending email:', error);
-    throw new Error('Failed to send email.');
-  }
+  const emailContent = WelcomeEmail({ fullName });
+  return await resend.emails.send({
+    from: 'Filip <info@zaprojekte.com>',
+    to: [email],
+    subject,
+    react: emailContent,
+  });
 };

@@ -1,51 +1,41 @@
-import {
-  Html,
-  Head,
-  Body,
-  Container,
-  Heading,
-  Text,
-  Button,
-} from '@react-email/components';
 import React from 'react';
 
-type Props = {
-  message: string;
-  fullName: string;
+const WelcomeEmail = ({ fullName }: { fullName: string }) => {
+  return (
+    <div
+      style={{
+        fontFamily: 'Arial, sans-serif',
+        lineHeight: '1.6',
+        color: '#333',
+      }}
+    >
+      <h1 style={{ color: '#007bff' }}>Welcome to Zaprojekte, {fullName}!</h1>
+      <p>
+        We're thrilled to have you on board. Zaprojekte is your gateway to
+        innovative solutions and seamless project execution.
+      </p>
+      <p>
+        To get started, explore your dashboard, connect with our community, and
+        bring your ideas to life.
+      </p>
+      <p>
+        If you have any questions, feel free to reach out to us at
+        <a
+          href="mailto:info@zaprojekte.com"
+          style={{ color: '#007bff', textDecoration: 'none' }}
+        >
+          {' '}
+          info@zaprojekte.com
+        </a>
+        .
+      </p>
+      <p>Welcome aboard, and let's create something amazing together!</p>
+      <p>Best regards,</p>
+      <p>
+        <strong>The Zaprojekte Team</strong>
+      </p>
+    </div>
+  );
 };
 
-export default function WelcomeEmail({ fullName, message }: Props) {
-  return (
-    <Html>
-      <Head />
-      <Body style={{ backgroundColor: '#f4f4f4', padding: '20px' }}>
-        <Container
-          style={{
-            maxWidth: '600px',
-            margin: 'auto',
-            backgroundColor: '#ffffff',
-            padding: '20px',
-            borderRadius: '10px',
-          }}
-        >
-          <Heading style={{ color: '#333' }}>
-            Welcome to the platform, ${fullName}!
-          </Heading>
-          <Text style={{ color: '#555' }}>{message}</Text>
-          <Button
-            href="https://zaprojekte.com"
-            style={{
-              backgroundColor: '#007bff',
-              color: '#ffffff',
-              padding: '10px 20px',
-              textDecoration: 'none',
-              borderRadius: '5px',
-            }}
-          >
-            Get Started
-          </Button>
-        </Container>
-      </Body>
-    </Html>
-  );
-}
+export default WelcomeEmail;
